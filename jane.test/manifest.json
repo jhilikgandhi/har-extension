@@ -1,0 +1,25 @@
+{
+    "name": "HAR Generator",
+    "description": "Generates, saves, and sends HAR files",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+      "default_popup": "popup/popup.html"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "js": ["scripts/content.js"],
+        "matches": [
+          "https://google.com/*",
+          "https://developer.chrome.com/docs/extensions/*"
+        ]
+      }
+    ],    
+    "devtools_page": "devtools/devtools.html",
+    "permissions": [
+      "downloads"
+    ]
+  }
