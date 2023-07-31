@@ -1,5 +1,9 @@
-console.log(':::::inside devtools');
-
+const trace = {
+    log: function(...args) {
+        const escaped = args.map(JSON.stringify).join(",");
+        chrome.devtools.inspectedWindow.eval(`console.log(${escaped});`);
+    },
+};
 // function handleNavigated(url) {
 //     console.log('::::' + url);
 // }
@@ -14,11 +18,11 @@ console.log(':::::inside devtools');
 //         function (harLog) {
 //             let updatedHarLog = {};
 //             updatedHarLog.log = harLog;
-    
+
 //             let harBLOB = new Blob([JSON.stringify(updatedHarLog)]);
-    
+
 //             let url = URL.createObjectURL(harBLOB);
-    
+
 //             chrome.downloads.download({
 //                 url: url,
 //                 filename: "test.har"
@@ -34,22 +38,22 @@ var interval = setInterval( function() {
         function (harLog) {
             let updatedHarLog = {};
             updatedHarLog.log = harLog;
-    
+
             let harBLOB = new Blob([JSON.stringify(updatedHarLog)]);
-    
+
             let url = URL.createObjectURL(harBLOB);
-    
+
             chrome.downloads.download({
                 url: url,
                 filename: "test.har"
             });
             console.log(':::::har log downloaded');
         }
-    );             
-     }, 5000 );
+    );
+  }, 30000 );
 
-     
+
 chrome.devtools.panels.create("Test", null, "devtools/panel.html", function(panel) {
     // code invoked on panel creation
-    console.log(':::::inside panel.create');
+    trace.log(':::::inside panel.create');
 });
