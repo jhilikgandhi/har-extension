@@ -9,15 +9,6 @@
     "background": {
       "service_worker": "background.js"
     },
-    "content_scripts": [
-      {
-        "js": ["scripts/content.js"],
-        "matches": [
-          "https://google.com/*",
-          "https://developer.chrome.com/docs/extensions/*"
-        ]
-      }
-    ],
     "devtools_page": "devtools/devtools.html",
     "permissions": [
       "downloads","storage"
