@@ -24,11 +24,11 @@ class CustomHar {
 
     static clearRequest() {
         console.log('::::Clearing HAR')
-        this.arrayRequests.length = 0;
+        this.arrayRequests = [];
     }
 }
 
-function createValidHar() {
+function createHarBlob() {
     let harJson = {
         "log": {
             "version": "1.2",
@@ -54,13 +54,12 @@ function createValidHar() {
     let harBlob = new Blob([JSON.stringify(harJson)]);
     console.log('::::Generated harBlob');
     console.log(harBlob);
+    CustomHar.clearRequest();
     return harBlob;
 }
 
-var interval = setInterval( function() {
-    clearInterval(interval);
-    // let harBlob = new Blob([JSON.stringify(CustomHar.generateHar())]);
-    let harBlob = createValidHar();
+function downloadHar() {
+    let harBlob = createHarBlob();
     let url = URL.createObjectURL(harBlob);
 
     let currentDatetime =  new Date();
@@ -71,13 +70,15 @@ var interval = setInterval( function() {
         url: url,
         filename: formattedFilename
     });
-    console.log('::::' + formattedFilename);
+    console.log('::::Downloaded ' + formattedFilename);
+}
 
+var interval = setInterval( function() {
+    downloadHar();
   }, settings.interval );
 
 chrome.devtools.panels.create("Logging Info", null, "devtools/panel.html", function(panel) {
     // code invoked on panel creation
-    trace.log('::::inside panel.create');
 });
 
 chrome.devtools.network.onRequestFinished.addListener( (request) => {
