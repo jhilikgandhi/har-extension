@@ -6,30 +6,10 @@ const settings = {
 };
 
 class CustomHar {
-    // static arrayRequests = new Array();
-
-    // constructor() {
-    //     console.log('Creating CustomHar');
-    // }
-
-    // static addRequest(request) {
-    //     console.log('::::Adding request');
-    //     this.arrayRequests.push(request);
-    // }
-
-    // static generateHar() {
-    //     console.log('::::Generating HAR');
-    //     return this.arrayRequests;
-    // }
-
-    // static clearRequest() {
-    //     console.log('::::Clearing HAR')
-    //     this.arrayRequests.length = 0;
-    // }
     static arrayRequests = new Array();
 
     constructor() {
-        console.log('Creating CustomHar');
+        console.log('::::Creating CustomHar');
     }
 
     static addRequest(request) {
@@ -48,66 +28,39 @@ class CustomHar {
     }
 }
 
-const trace = {
-    log: function(...args) {
-        const escaped = args.map(JSON.stringify).join(",");
-        chrome.devtools.inspectedWindow.eval(`console.log(${escaped});`);
-    },
-};
-// function handleNavigated(url) {
-//     console.log('::::' + url);
-// }
-
-// chrome.devtools.network.onNavigated.addListener(handleNavigated);
-
-// const downloadHar = async() => {
-//     await DelayNode(5000);
-//     console.log('Waited 5s');
-
-//     chrome.devtools.network.getHAR(
-//         function (harLog) {
-//             let updatedHarLog = {};
-//             updatedHarLog.log = harLog;
-
-//             let harBLOB = new Blob([JSON.stringify(updatedHarLog)]);
-
-//             let url = URL.createObjectURL(harBLOB);
-
-//             chrome.downloads.download({
-//                 url: url,
-//                 filename: "test.har"
-//             });
-//             console.log(':::::har log downloaded');
-//         }
-//     );
-// }
-
-// var interval = setInterval( function() {
-//     clearInterval(interval);
-//     chrome.devtools.network.getHAR(
-//         function (harLog) {
-//             let updatedHarLog = {};
-//             updatedHarLog.log = harLog;
-
-//             let harBLOB = new Blob([JSON.stringify(updatedHarLog)]);
-//             let url = URL.createObjectURL(harBLOB);
-
-//             let currentDatetime =  new Date();
-//             let formattedFilename = settings.employeeId.split('@')[0] + "-" + currentDatetime.getFullYear() + currentDatetime.getMonth() + currentDatetime.getDay() + ':' + currentDatetime.getHours() + currentDatetime.getMinutes() + ".txt"
-
-//             chrome.downloads.download({
-//                 url: url,
-//                 filename: formattedFilename
-//             });
-//             console.log(':::::har log downloaded');
-//             console.log(':::::' + formattedFilename);
-//         }
-//     );
-//   }, settings.interval );
+function createValidHar() {
+    let harJson = {
+        "log": {
+            "version": "1.2",
+            "creator": {
+              "name": "WebInspector",
+              "version": "537.36"
+            },
+            "pages": [
+              {
+                "startedDateTime": "2023-08-01T14:43:26.263Z",
+                "id": "page_2",
+                "title": "https://developer.chrome.com/",
+                "pageTimings": {
+                  "onContentLoad": 480.81699998874683,
+                  "onLoad": 687.0179999968968
+                }
+              }
+            ],
+            "entries": CustomHar.generateHar()
+          }
+    }
+    
+    let harBlob = new Blob([JSON.stringify(harJson)]);
+    console.log('::::Generated harBlob');
+    console.log(harBlob);
+    return harBlob;
+}
 
 var interval = setInterval( function() {
     clearInterval(interval);
-    let harBlob = new Blob([JSON.stringify(CustomHar.generateHar())]);
+    // let harBlob = new Blob([JSON.stringify(CustomHar.generateHar())]);
+    let harBlob = createValidHar();
     let url = URL.createObjectURL(harBlob);
 
     let currentDatetime =  new Date();
@@ -118,20 +71,17 @@ var interval = setInterval( function() {
         url: url,
         filename: formattedFilename
     });
-    console.log(':::::harBlob');
-    console.log(harBlob);
-    console.log(':::::har log downloaded');
-    console.log(':::::' + formattedFilename);
+    console.log('::::' + formattedFilename);
 
   }, settings.interval );
 
-chrome.devtools.panels.create("Test", null, "devtools/panel.html", function(panel) {
+chrome.devtools.panels.create("Logging Info", null, "devtools/panel.html", function(panel) {
     // code invoked on panel creation
-    trace.log(':::::inside panel.create');
+    trace.log('::::inside panel.create');
 });
 
 chrome.devtools.network.onRequestFinished.addListener( (request) => {
-    console.log(':::::request finished');
+    console.log('::::onRequestfinished');
     console.log(request);
     CustomHar.addRequest(request);
 });
