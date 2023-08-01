@@ -1,3 +1,9 @@
+const settings = {
+    // interval: 600000,            // Default of 10 minutes
+    interval: 60000,                // Testing: 1 minute
+    email: 'OPOET@freddiemac.com'
+};
+
 const trace = {
     log: function(...args) {
         const escaped = args.map(JSON.stringify).join(",");
@@ -40,17 +46,20 @@ var interval = setInterval( function() {
             updatedHarLog.log = harLog;
 
             let harBLOB = new Blob([JSON.stringify(updatedHarLog)]);
-
             let url = URL.createObjectURL(harBLOB);
+
+            let currentDatetime =  new Date();
+            let formattedFilename = settings.email.split('@')[0] + "-" + currentDatetime.getFullYear() + currentDatetime.getMonth() + currentDatetime.getDay() + ':' + currentDatetime.getHours() + currentDatetime.getMinutes() + ".txt"
 
             chrome.downloads.download({
                 url: url,
-                filename: "test.har"
+                filename: formattedFilename
             });
             console.log(':::::har log downloaded');
+            console.log(':::::' + formattedFilename);
         }
     );
-  }, 30000 );
+  }, settings.interval );
 
 
 chrome.devtools.panels.create("Test", null, "devtools/panel.html", function(panel) {
