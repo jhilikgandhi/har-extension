@@ -1,0 +1,39 @@
+<html data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+    <div class="container">
+        <h3>HAR Generator</h3>
+
+        <label class="form-label" for="email">Email</label>
+        <input class="form-control" id="email" type="email" />
+        <div id="email-feedback" class="invalid-feedback d-none">
+            Invalid Email address.
+        </div>
+
+        <label class="form-label mt-2" for="interval">Interval (min.)</label>
+        <input class="form-control" id="interval" type="number" min="0" />
+        <div id="interval-feedback" class="invalid-feedback d-none">
+            Invalid interval.
+        </div>
+
+        <label class="form-label mt-2" for="url">URL pattern (<a href="https://developer.chrome.com/docs/extensions/mv3/match_patterns/" target="_blank">see</a> reference)</label>
+        <input class="form-control" id="url" type="text" />
+        <div id="url-feedback" class="invalid-feedback d-none">
+            Invalid URL pattern.
+        </div>
+
+        <button class="btn btn-success mt-2" id="start" type="submit">Start</button>
+        <button class="btn btn-danger mt-2 d-none" id="stop">Stop</button>
+    </div>
+</body>
+
+<script src="popup.js"></script>
+</body>
+
+</html>
