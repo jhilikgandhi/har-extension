@@ -114,6 +114,6 @@ chrome.storage.local.get({
     urlInput.value = settings.urlPattern;
 });
 
-chrome.runtime.sendMessage({ type: "state" }, (enabled) => {
-    updateUi(enabled);
-});
+// chrome.runtime.sendMessage({ type: "state" }, (enabled) => {
+//     updateUi(enabled);
+// });
