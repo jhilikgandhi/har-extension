@@ -3,10 +3,12 @@ const stopButton = document.querySelector("#stop");
 const emailInput = document.querySelector("#email");
 const intervalInput = document.querySelector("#interval");
 const urlInput = document.querySelector("#url");
+const fidInput = document.querySelector("#fid");
 
 const inputs = [
     emailInput,
     intervalInput,
+    fidInput,
     urlInput
 ];
 
@@ -32,6 +34,7 @@ function onBlur(e) {
     chrome.storage.local.set({
         email: emailInput.value,
         urlPattern: urlInput.value,
+        fid: fidInput.value,
         interval: intervalInput.value
     });
 }
@@ -55,6 +58,10 @@ function validate() {
         isValid = false;
     }
 
+    if (!validateInterval(fidInput.value)){
+        showError(fidInput);
+        isvalid = false;
+    }
     return isValid;
 }
 
@@ -72,6 +79,10 @@ function validateEmail(email) {
 function validateInterval(interval) {
     interval = parseInt(interval);
     return !isNaN(interval) && interval > 0;
+}
+
+function validateFid(fid) {
+    return true;
 }
 
 function clearErrors() {
@@ -107,11 +118,13 @@ function updateUi(enabled) {
 chrome.storage.local.get({
     email: null,
     urlPattern: "*://*.stackexchange.com/*",
-    interval: 1
+    interval: 1,
+    fid: null
 }, function (settings) {
     emailInput.value = settings.email;
     intervalInput.value = settings.interval;
     urlInput.value = settings.urlPattern;
+    fidInput.value = settings.fid;
 });
 
 // chrome.runtime.sendMessage({ type: "state" }, (enabled) => {
