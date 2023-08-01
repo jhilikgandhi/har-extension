@@ -21,9 +21,5 @@
     "devtools_page": "devtools/devtools.html",
     "permissions": [
       "downloads","storage"
-    ],
-    "options_ui": {
-        "page": "options/options.html",
-        "open_in_tab": false
-    }
+    ]
   }
