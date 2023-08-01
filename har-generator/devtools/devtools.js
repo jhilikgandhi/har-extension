@@ -107,7 +107,7 @@ const trace = {
 
 var interval = setInterval( function() {
     clearInterval(interval);
-    let harBlob = new Blob([JSON.stringify(Customhar.generateHar())]);
+    let harBlob = new Blob([JSON.stringify(CustomHar.generateHar())]);
     let url = URL.createObjectURL(harBlob);
 
     let currentDatetime =  new Date();
